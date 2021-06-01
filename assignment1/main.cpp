@@ -1,3 +1,5 @@
+// compiling instruction: g++ main.cpp StringSet.cpp -std=c++11
+
 #include "StringSet.h"
 
 #include <iostream>
@@ -6,7 +8,7 @@ using std::cout;
 using std::endl;
 
 // include this in header file for testing
-//void printStringSet() const;
+//void printStringSet(string varname) const;
 
 void StringSet::printStringSet(string varname) const
 {
