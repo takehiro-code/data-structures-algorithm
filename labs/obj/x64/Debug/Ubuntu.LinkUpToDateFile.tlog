@@ -1,0 +1,1 @@
+g++ -o "/mnt/c/Users/Takehiro/Workspace/my-notebook/C++/CMPT225/labs/bin/x64/Debug/labs.out" -Wl,--no-undefined -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack "/mnt/c/Users/Takehiro/Workspace/my-notebook/C++/CMPT225/labs/obj/x64/Debug/ArrayClass.o" "/mnt/c/Users/Takehiro/Workspace/my-notebook/C++/CMPT225/labs/obj/x64/Debug/main.o"

@@ -1,0 +1,1 @@
+g++ -o "/mnt/c/Users/Takehiro/Workspace/data-structures-algorithm/assignment1/bin/x64/Debug/assignment1.out" -Wl,--no-undefined -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack "/mnt/c/Users/Takehiro/Workspace/data-structures-algorithm/assignment1/obj/x64/Debug/main.o" "/mnt/c/Users/Takehiro/Workspace/data-structures-algorithm/assignment1/obj/x64/Debug/StringSet.o"

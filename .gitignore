@@ -1,0 +1,10 @@
+# files to be ignored
+.zip
+.rar
+a.out
+
+# folders to be removed
+.vs/
+test/
+readme/
+demo/
