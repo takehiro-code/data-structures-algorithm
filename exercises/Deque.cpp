@@ -8,13 +8,36 @@ using std::endl;
 // ONLY CHANGE BODY OF THESE TWO METHODS
 void Deque::copyDeque(const Deque & dq)
 {
+	// initialize n, front, back
+	n = dq.n;
+	front = nullptr;
+	back = nullptr;
+
+	copyNode(dq.back, front);
 
 }
 
 // Recursive helper method for copyDeque
 void Deque::copyNode(Ex4Node* original, Ex4Node* copy)
 {
-
+	 //base case
+	if (original == nullptr) {
+		return;
+	}
+	// recusive case
+	else 
+	{
+		// identical to insert_front
+		copy = new Ex4Node(original->data, nullptr, front);
+		front = copy;
+		if (back == nullptr) {
+			back = front;
+		}
+		else {
+			front->next->previous = front;
+		}
+		copyNode(original->previous, copy);
+	}
 }
 
 // DO NOT CHANGE ANYTHING BELOW THIS LINE

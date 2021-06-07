@@ -1,6 +1,6 @@
 # files to be ignored
-.zip
-.rar
+*.zip
+*.rar
 a.out
 
 # folders to be removed
