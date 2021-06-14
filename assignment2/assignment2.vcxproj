@@ -35,9 +35,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{0f73149d-20ad-43e7-9b58-77beca2082af}</ProjectGuid>
+    <ProjectGuid>{f3582c79-e53d-4445-bca5-6b76da12e4ab}</ProjectGuid>
     <Keyword>Linux</Keyword>
-    <RootNamespace>labs</RootNamespace>
+    <RootNamespace>assignment2</RootNamespace>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <ApplicationType>Linux</ApplicationType>
     <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
@@ -76,12 +76,10 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
-    <ClCompile Include="ArrayClass.cpp" />
-    <ClCompile Include="cmpt225labtemplate.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ArrayClass.h" />
+    <ClInclude Include="QueueT.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

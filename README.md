@@ -74,4 +74,43 @@ To run,
 ___
 ## Notes
 
+## Front vs Back vs Top vs Bottom in LinkedList
+
+### Insert Front (or push)
+Insert "front" ≡ push to the "top". For example,
+
+```
+obj.insert_front(42); // or obj.push(42)
+obj.insert_front(7); // or obj.push(7)
+obj.insert_front(1); // or obj.push(1)
+obj.insert_front(6); // or obj.push(6)
+```
+(front) 42 -> 7 -> 1 -> 6 (back) -> null
+
+Typical insert front implementation:
+```
+Node* newNode = new Node(val, front);
+front = newNodeT;
+size++;
+```
+
+Insert "back" ≡ Insert at the "bottom". For example,
+
+```
+obj.insert_back(42);
+obj.insert_back(7);
+obj.insert_back(1);
+obj.insert_back(6);
+```
+(front) 6 -> 1 -> 7 -> 42 (back) -> null
+
+Given (front) 7 -> 5 -> 3 -> 1 (back) -> null,
+
+Remove "front" ≡ pop will be:
+
+(front) 5 -> 3 -> 1 (back) -> null
+
+Remove "back" will be:
+
+(front) 7 -> 5 -> 3 (back) -> null
 
