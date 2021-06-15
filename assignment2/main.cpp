@@ -2,7 +2,7 @@
 
 void intTest() 
 {
-    cout << "test qt1 ..." << endl;
+    cout << "test qt1 (multiple items) ..." << endl;
     // (front) 1 -> 3 -> 5 -> 7 (back) -> null
     cout << "Expected: (front) 3 -> 5 -> 7 (back) -> null" << endl;
     QueueT qt1;
@@ -18,7 +18,7 @@ void intTest()
     cout << endl;
 
 
-    cout << "test qt2 ..." << endl;
+    cout << "test qt2 (one item) ..." << endl;
     // (front, back) 1 -> null
     cout << "Expected: (front, back) 1 -> null" << endl;
     QueueT qt2;
@@ -30,11 +30,16 @@ void intTest()
     cout << endl;
 
 
-    cout << "test qt3 ..." << endl;
+    cout << "test qt3 (empty queue) ..." << endl;
     // (front, back) -> null
     cout << "Expected: (front, back) -> null" << endl;
     QueueT qt3;
-    //qt3.dequeue(); // it will cause memoty leak
+    try {
+        qt3.dequeue(); // runtime_error
+    }
+    catch (runtime_error re) {
+        cout << "it's an error!" << endl;
+    }
     cout << "# of items = " << qt3.size() << endl;
     cout << "Empty?: " << qt3.empty() << endl;
     cout << endl;
@@ -77,6 +82,39 @@ void intTest()
     cout << "Empty?: " << qt6.empty() << endl;
     cout << endl;
 
+
+    cout << "test qt7 and qt8 for concatenation ..." << endl;
+    cout << "Expected for qt7: (front) 3 -> 5 -> 7 -> 3 -> 5 (back) -> null" << endl;
+    cout << "Expected for qt8: (front, back) 7 -> null" << endl;
+    QueueT qt7, qt8;
+    qt7 = qt1;
+    qt8 = qt1;
+    qt7.concatenate(qt8, 2);
+    qt7.print();
+    cout << "# of items = " << qt7.size() << endl;
+    cout << "Empty?: " << qt7.empty() << endl;
+    cout << endl;
+
+    qt8.print();
+    cout << "# of items = " << qt8.size() << endl;
+    cout << "Empty?: " << qt8.empty() << endl;
+    cout << endl;
+
+    cout << "test qt9, qt10, qt11 for merging ..." << endl;
+    //cout << "Expected for qt7: (front) 3 -> 5 -> 7 -> 3 -> 5 (back) -> null" << endl;
+    QueueT qt9, qt10, qt11;
+    qt10 = qt1;
+    qt11.enqueue(4);
+    qt11.enqueue(8);
+    qt11.enqueue(1);
+    qt11.enqueue(9);
+    qt11.enqueue(-4);
+    qt9 = qt10.merge(qt11);
+    qt9.print();
+    cout << "# of items = " << qt9.size() << endl;
+    cout << "Empty?: " << qt9.empty() << endl;
+    cout << "Front node: " << qt9.getFront()->data << endl;
+    cout << endl;
 }
 
 
@@ -86,6 +124,7 @@ int main()
 
     cout << "------------------------------- int testing --------------------------" << endl;
     intTest();
+
 
     return 0;
 }

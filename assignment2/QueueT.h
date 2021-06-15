@@ -60,8 +60,20 @@ public:
 	// returns the number of elements stored in the queue
 	int size() const;
 
+	// concatenating a parameter queue to the calling object of queue
+	// PRE: Given two queues (calling object and parameter)
+	// PARAM: Passing queue and its integer n, the first n values to take and concatenate to the calling object 
+	// POST: First n values of parameter queue will be removed and added to the calling object
+	void concatenate(QueueT& qt, int n);
+
+	// merging two queues
+	// PRE: Given two queues (calling object and parameter)
+	// PARAM: Constant reference parameter of queue
+	// POST: Returns a merged queue. e.g. calling object = {a,b,c,d,e}, parameter = {r,s,t}, result = {a,r,b,s,c,t,d,e}
+	QueueT merge(const QueueT& qt) const;
+
 	// return the front pointer for testing
-	NodeT* getFront() const;
+	NodeT* getFront() { return front; };
 
 private:
 	NodeT* front; // pointer that points to the front node of the queue
@@ -75,7 +87,7 @@ private:
 
 
 // --------------------------------------------------------------------------------------
-// QueueT definitions
+// QueueT class definitions
 // --------------------------------------------------------------------------------------
 
 
@@ -188,11 +200,55 @@ int QueueT::size() const
 }
 
 
-// return the front pointer for testing
-NodeT* QueueT::getFront() const
+// concatenating a parameter queue to the calling object of queue
+// PRE: Calling object is initialized already but could be either empty or non-empty
+// PARAM: Passing parameter queue and its integer n, the first n values to take and concatenate to the calling object 
+// POST: First n values of parameter of the queue will be removed and added to the calling object
+void QueueT::concatenate(QueueT& qt, int n)
 {
-	return front; 
-};
+	if (n < 0 || n > qt.size()) {
+		throw runtime_error("Number of values exceeds the queue size");
+	}
+	else {
+		for (int i = 0; i < n; i++) 
+		{
+			// remove the item from qt at the front and add it to the back of the calling object queue
+			int removedItem = qt.dequeue();
+			enqueue(removedItem);
+		}
+	}
+}
+
+
+// merging two queues
+// PRE: Given two queues (calling object and parameter)
+// PARAM: Constant reference parameter of queue
+// POST: Returns a merged queue. e.g. calling object = {a,b,c,d,e}, parameter = {r,s,t}, result = {a,r,b,s,c,t,d,e}
+QueueT QueueT::merge(const QueueT& qt) const
+{
+	QueueT result;
+
+	// position pointers for each queue starting from front node
+	NodeT* p_calling = front;
+	NodeT* p_param = qt.front;
+
+	// if both of the queues reach nullptr, go out of the loop
+	while (p_calling != nullptr || p_param != nullptr) 
+	{
+		// insert the item from the calling object first if applicable
+		if (p_calling != nullptr) {
+			result.enqueue(p_calling->data);
+			p_calling = p_calling->next;
+		}
+
+		// after inserting the item from the calling object, insert the item from the parameter if applicable
+		if (p_param != nullptr) {
+			result.enqueue(p_param->data);
+			p_param = p_param->next;
+		}
+	}
+	return result;
+}
 
 
 // --------------------------------------------------------------------------------------
