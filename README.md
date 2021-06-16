@@ -1,5 +1,12 @@
 # CMPT 225
 
+To compress the files with zip command,
+
+`zip archivename.zip filename1 filename2 filename3`
+
+To unzip the files to a newly created folder,
+
+`unzip archivename.zip -d foldername` 
 
 ## Development environment
 

@@ -1,3 +1,6 @@
+// Referenced the code for idea from the Lecture code (our own course, posted on Canvas) stack.h and stack.cpp
+// especially for copy constructor, destructor, and the overloaded assignment operator
+
 #pragma once
 #include <stdexcept>
 #include <iostream>
