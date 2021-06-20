@@ -5,6 +5,8 @@ a.out
 
 # folders to be removed
 .vs/
-test/
 readme/
 demo/
+bin/
+obj/
+test2/
