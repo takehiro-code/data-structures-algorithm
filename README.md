@@ -121,3 +121,8 @@ Remove "back" will be:
 
 (front) 7 -> 5 -> 3 (back) -> null
 
+### BST Traversal
+
+in-order: sorted
+pre-order: root, left, right
+post-order: left, right, root
