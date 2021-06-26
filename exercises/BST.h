@@ -38,5 +38,6 @@ private:
 
 	void inOrderPrint(TreeNode* nd) const;
 	void clear(TreeNode* nd);
-	// EXERCISE 7: Helper method (if desired)
+	// EXERCISE 7: Helper method bellow
+	int traverse(TreeNode* nd, int height) const;
 };

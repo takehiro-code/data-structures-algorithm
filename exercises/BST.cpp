@@ -4,10 +4,33 @@
 // Returns the height of the tree - number of levels - 1
 int BST::height() const
 {
-	return -1;
+	// initialize height as -1
+	int height = traverse(root, -1);
+	return height;
 }
 
 // Helper method (if any)
+
+// height should be pass-by-value so that it updates individually in different branch
+int BST::traverse(TreeNode* nd, int height) const
+{
+	if (nd != nullptr)
+	{
+		// before go to the its childs, increment update height for the current node height
+		height++;
+		int heightLeft = traverse(nd->left, height);
+		int heightRight = traverse(nd->right, height);
+
+		// when returning to the node after traversing left subtree and right subtree, post-check which height is higher
+		if (heightLeft < heightRight) {
+			height = heightRight;
+		}
+		else {
+			height = heightLeft;
+		}
+	}
+	return height;
+}
 
 
 // END EXERCISE 7 --------------------------
