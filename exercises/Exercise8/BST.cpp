@@ -5,15 +5,35 @@
 BST::BST(const BST & bst)
 {
 	root = nullptr;
+	copyBST(bst.root); // copying operation starts from bst.root
 }
 
 // Overloaded assignment operator
 BST & BST::operator=(const BST & bst)
 {
+	if (this != &bst)
+	{
+		// need to delete to clean up the existing contents before copying
+		clear();
+		copyBST(bst.root); // copying operation starts from bst.root
+	}
 	return *this;
 }
 
 // Helper method (if any)
+
+// private method for copying
+// inserting elements with the pre-order traversal
+void BST::copyBST(TreeNode* nd)
+{
+	if (nd != nullptr) {
+		insert(nd->data);
+		copyBST(nd->left);
+		copyBST(nd->right);
+	}
+}
+
+
 
 // END EXERCISE 8 --------------------------
 

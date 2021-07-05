@@ -49,4 +49,5 @@ private:
 	void clear(TreeNode* nd);
 	int height(TreeNode* nd, int ht) const;
 	// EXERCISE 8: Helper method (if desired)
+	void copyBST(TreeNode* nd);
 };

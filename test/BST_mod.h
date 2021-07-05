@@ -23,6 +23,10 @@ public:
 	BST();
 	~BST();
 
+	//copy constructor
+	BST(const BST& bst);
+	BST& operator=(const BST& bst);
+
 	// Mutators
 	void insert(int value);
 	void clear();
@@ -43,5 +47,6 @@ private:
 	void postOrderPrint(TreeNode* nd) const;
 
 	void clear(TreeNode* nd);
-	// EXERCISE 7: Helper method (if desired)
+	int height(TreeNode* nd, int ht) const;
+	void copyBST(TreeNode* nd);
 };
