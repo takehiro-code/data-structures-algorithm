@@ -1,0 +1,7 @@
+kat 20.0
+kate 78.513
+kate2 90.0 
+bob 23.45
+sue 87.456
+kurt 80.45
+morgan 61.43
