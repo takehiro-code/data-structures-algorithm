@@ -16,15 +16,16 @@ using std::endl;
 
 
 // Red black tree node class
+template <class T>
 class NodeT
 {
 public:
-	int data;
+	T data;
 	NodeT* left;
 	NodeT* right;
 	NodeT* parent;
 	bool isBlack; // true if node is black, false if node is red
-	NodeT(int value) : data(value), left(nullptr), right(nullptr), parent(nullptr), isBlack(false) {};
+	NodeT(T value) : data(value), left(nullptr), right(nullptr), parent(nullptr), isBlack(false) {};
 };
 
 
@@ -33,6 +34,7 @@ public:
 // -----------------------------------------------------------------------------------------------
 
 // red black tree class declarations
+template <class T>
 class RedBlackTree
 {
 public:
@@ -54,42 +56,41 @@ public:
 	~RedBlackTree();
 
 	// insert
-	bool insert(const int value);
-	bool remove(const int value);
-	bool search(const int value) const;
-	vector<int> search(int value1, int value2) const;
-	int closestLess(const int value) const;
-	int closestGreater(const int value) const;
-	vector<int> values() const;
+	bool insert(const T value);
+	bool remove(const T value);
+	bool search(const T value) const;
+	vector<T> search(T value1, T value2) const;
+	T closestLess(const T value) const;
+	T closestGreater(const T value) const;
+	vector<T> values() const;
 	int size() const;
 
-	// foe debugging
+	template <class Tjwme>
+	friend NodeT<Tjwme>* JWMEgetRoot(const RedBlackTree<Tjwme>& rbt);
+
+	// for debugging
 	void preOrderPrint() const;
 	void inOrderPrint() const;
-
-	//template <class Tjwme>
-	//friend NodeT<Tjwme>* JWMEgetRoot(const RedBlackTree<Tjwme>& rbt);
-
+	void visualize() const;
+	void preOrderPrint(NodeT<T>* node) const;
+	void inOrderPrint(NodeT<T>* node) const;
+	void visualizeTraversal(NodeT<T>* node, string space, bool flag) const;
 
 private:
-	NodeT* root;
+	NodeT<T>* root;
 	int curSize;
 
 	// private methods
-	void copyRedBlackTree(NodeT* node);
-	void clear(NodeT* node);
-	NodeT* searchNodeAndReturn(const int value) const;
-	void inOrderTraversal(NodeT* node, vector<int>& result, const int & smallestValue, const int & largestValue) const;
-	NodeT* bstInsert(int value);
-	void leftRotate(NodeT* node);
-	void rightRotate(NodeT* node);
-	NodeT* predecessor(NodeT* node) const;
-	NodeT* successor(NodeT* node) const;
-	void rbTreeFix(NodeT* node, NodeT* parent);
-
-	// for debugging
-	void preOrderPrint(NodeT* nd) const;
-	void inOrderPrint(NodeT* nd) const;
+	void copyRedBlackTree(NodeT<T>* node);
+	void clear(NodeT<T>* node);
+	NodeT<T>* searchNodeAndReturn(const T value) const;
+	void inOrderTraversal(NodeT<T>* node, vector<T>& result, const T & smallestValue, const T & largestValue) const;
+	NodeT<T>* bstInsert(const T value);
+	void leftRotate(NodeT<T>* node);
+	void rightRotate(NodeT<T>* node);
+	NodeT<T>* predecessor(NodeT<T>* node) const;
+	NodeT<T>* successor(NodeT<T>* node) const;
+	void rbTreeFix(NodeT<T>* node, NodeT<T>* parent);
 };
 
 
@@ -101,7 +102,8 @@ private:
 // RedBlackTree class definitions
 
 // Default constructor
-RedBlackTree::RedBlackTree() 
+template <class T>
+RedBlackTree<T>::RedBlackTree() 
 {
 	root = nullptr;
 	curSize = 0;
@@ -111,7 +113,8 @@ RedBlackTree::RedBlackTree()
 // Copy constructor
 // PRE: calling object not initialized yet
 // POST: Copying the contents of rbTree to the calling object
-RedBlackTree::RedBlackTree(const RedBlackTree& rbTree)
+template <class T>
+RedBlackTree<T>::RedBlackTree(const RedBlackTree<T>& rbTree)
 {
 	// initializing the red black tree attributes for the calling object
 	root = nullptr;
@@ -123,7 +126,8 @@ RedBlackTree::RedBlackTree(const RedBlackTree& rbTree)
 // Overloaded assignment operator
 // PRE: calling object may contain contents
 // POST: Copying the contents of rbTree to the calling object
-RedBlackTree& RedBlackTree::operator=(const RedBlackTree& rbTree) 
+template <class T>
+RedBlackTree<T>& RedBlackTree<T>::operator=(const RedBlackTree<T>& rbTree) 
 {
 	if (this != &rbTree)
 	{
@@ -137,7 +141,8 @@ RedBlackTree& RedBlackTree::operator=(const RedBlackTree& rbTree)
 
 // destructor
 // POST: all the memory will be de-allocated
-RedBlackTree::~RedBlackTree() 
+template <class T>
+RedBlackTree<T>::~RedBlackTree() 
 {
 	clear(root);
 }
@@ -149,7 +154,8 @@ RedBlackTree::~RedBlackTree()
 // NOTE: The following nodes are used,
 //			node: node to be inserted (node cannot be nullptr)
 //			uncle: uncle of node (uncle could be nullptr)
-bool RedBlackTree::insert(const int value) 
+template <class T>
+bool RedBlackTree<T>::insert(const T value) 
 {
 	// when value is already in the tree, don't insert
 	if (search(value)) {
@@ -157,7 +163,7 @@ bool RedBlackTree::insert(const int value)
 	}
 
 	// insert a node with value, and its color is already red
-	NodeT* node = bstInsert(value);
+	NodeT<T>* node = bstInsert(value);
 
 	// if node is not a root, then node's parent cannot be a nullptr
 	// if node parent is red, then node grand parent cannot be a nullptr
@@ -165,7 +171,7 @@ bool RedBlackTree::insert(const int value)
 	{
 		// if node's parent is the left child of its grand parent
 		if (node->parent == node->parent->parent->left) {
-			NodeT* uncle = node->parent->parent->right;
+			NodeT<T>* uncle = node->parent->parent->right;
 
 			// seg fault when uncle is nullptr, so use flag and do short circuit evaluation
 			bool uncleIsBlack = false;
@@ -192,7 +198,7 @@ bool RedBlackTree::insert(const int value)
 		}
 		// if node's parent is the right child of its grand parent --> symmetric to the left child case
 		else {
-			NodeT* uncle = node->parent->parent->left;
+			NodeT<T>* uncle = node->parent->parent->left;
 
 			bool uncleIsBlack = false;
 			if (uncle == nullptr || uncle->isBlack) {
@@ -232,10 +238,11 @@ bool RedBlackTree::insert(const int value)
 //		node: Node to be removed. Actually, the value will be overwritten by toBeRemoved.
 //		toBeRemoved: Node to be actually removed. It can be either node itself or predecessor. The value will be copied into node.
 //		child: The child node of toBeRemoved.
-bool RedBlackTree::remove(const int value)
+template <class T>
+bool RedBlackTree<T>::remove(const T value)
 {
 	// search for the value
-	NodeT* node = searchNodeAndReturn(value);
+	NodeT<T>* node = searchNodeAndReturn(value);
 
 	// if value is not in the tree
 	if (node == nullptr) {
@@ -243,7 +250,7 @@ bool RedBlackTree::remove(const int value)
 	}
 
 	// node that will be removed. Its content will be copied into the node
-	NodeT* toBeRemoved;
+	NodeT<T>* toBeRemoved;
 	// if node has one or no children
 	if (node->left == nullptr || node->right == nullptr) {
 		toBeRemoved = node;
@@ -254,7 +261,7 @@ bool RedBlackTree::remove(const int value)
 
 	// if toBeRemoved has a left child, left child becomes child node
 	// if toBeRemoved doesn't have a left child, right child becomes child node regardless of being nullptr
-	NodeT* child;
+	NodeT<T>* child;
 	if (toBeRemoved->left != nullptr) {
 		child = toBeRemoved->left;
 	}
@@ -304,9 +311,10 @@ bool RedBlackTree::remove(const int value)
 // Search the value in the RedBlackTree
 // PARAM: value - value tha we went to search in the tree
 // POST: Return true if value is found, otherwise, return false.
-bool RedBlackTree::search(const int value) const
+template <class T>
+bool RedBlackTree<T>::search(const T value) const
 {
-	NodeT* node = searchNodeAndReturn(value);
+	NodeT<T>* node = searchNodeAndReturn(value);
 	if (node == nullptr) {
 		return false;
 	}
@@ -322,7 +330,8 @@ bool RedBlackTree::search(const int value) const
 // PARAM: value1 and value2 determines the range [value1, value2] or [value2, value1] or [value1, value1]
 // POST: Return the vector of range [value1, value2] or [value2, value1] or [value1, value1]. value1 and value2 are inclusive.
 // vector is in ascending order (smallest to largest)
-vector<int> RedBlackTree::search(const int value1, const int value2) const
+template <class T>
+vector<T> RedBlackTree<T>::search(const T value1, const T value2) const
 {
 	vector<int> result;
 
@@ -343,11 +352,12 @@ vector<int> RedBlackTree::search(const int value1, const int value2) const
 // PARAM: value - value to be compared with the contents in the red black tree
 // POST: Return a value that is less the parameter value. 
 //		 If there is no value less than the parameter value, return the parameter value itself.
-int RedBlackTree::closestLess(const int value) const
+template <class T>
+T RedBlackTree<T>::closestLess(const T value) const
 {
-	int result = value;
+	T result = value;
 
-	NodeT* node = root; // starting from root node to search
+	NodeT<T>* node = root; // starting from root node to search
 	// while condition is search for value until node becomes nullptr, i.e., end of tree
 	while (node != nullptr) 
 	{
@@ -372,11 +382,12 @@ int RedBlackTree::closestLess(const int value) const
 // PARAM: value - value to be compared with the contents in the red black tree
 // POST: Return a value that is greater the parameter value. 
 //		 If there is no value greater than the parameter value, return the parameter value itself.
-int RedBlackTree::closestGreater(const int value) const
+template <class T>
+T RedBlackTree<T>::closestGreater(const T value) const
 {
-	int result = value;
+	T result = value;
 
-	NodeT* node = root; // starting from root node to search
+	NodeT<T>* node = root; // starting from root node to search
 	// while condition is search for value until node becomes nullptr, i.e., end of tree
 	while (node != nullptr)
 	{
@@ -397,18 +408,19 @@ int RedBlackTree::closestGreater(const int value) const
 
 
 // Return a vector of all values in ascending order. If tree is empty, returned vector is also empty.
-vector<int> RedBlackTree::values() const
+template <class T>
+vector<T> RedBlackTree<T>::values() const
 {
-	vector<int> result;
+	vector<T> result;
 
 	// if the tree is empty, return the empty vector
 	if (root == nullptr) {
 		return result;
 	}
 
-	int smallestValue, largestValue;
+	T smallestValue, largestValue;
 
-	NodeT* node = root; // starting from root node to search
+	NodeT<T>* node = root; // starting from root node to search
 	// find a smallest value
 	while (node != nullptr) {
 		smallestValue = node->data; // update the smallest value
@@ -429,7 +441,8 @@ vector<int> RedBlackTree::values() const
 
 
 // Return the size of the tree, i.e., the number of items in the tree
-int RedBlackTree::size() const
+template <class T>
+int RedBlackTree<T>::size() const
 {
 	return curSize;
 }
@@ -442,10 +455,11 @@ int RedBlackTree::size() const
 
 // private helper method for the copying Red black Tree used in copy constructor and overloaded assignment operator
 // inserting elements with the pre-order traversal
-void RedBlackTree::copyRedBlackTree(NodeT* node)
+template <class T>
+void RedBlackTree<T>::copyRedBlackTree(NodeT<T>* node)
 {
 	if (node != nullptr) {
-		NodeT* newNode = bstInsert(node->data);
+		NodeT<T>* newNode = bstInsert(node->data);
 		newNode->isBlack = node->isBlack;
 		copyRedBlackTree(node->left);
 		copyRedBlackTree(node->right);
@@ -457,7 +471,8 @@ void RedBlackTree::copyRedBlackTree(NodeT* node)
 // PRE:
 // PARAM: node - This should be root during the 1st call
 // POST: Removes all nodes from tree, deallocates dynamic memory
-void RedBlackTree::clear(NodeT* node)
+template <class T>
+void RedBlackTree<T>::clear(NodeT<T>* node)
 {
 	if (node != nullptr) {
 		clear(node->left);
@@ -473,10 +488,11 @@ void RedBlackTree::clear(NodeT* node)
 // Search for the node corresponding to the parameter value and return the node
 // PARAM: value - value to be searched for the node
 // POST: If found, return the node. If not found, return the nullptr.
-NodeT* RedBlackTree::searchNodeAndReturn(const int value) const
+template <class T>
+NodeT<T>* RedBlackTree<T>::searchNodeAndReturn(const T value) const
 {
 	// search for the value
-	NodeT* node = root; // starting from root node to search
+	NodeT<T>* node = root; // starting from root node to search
 	// while condition is search for value until node becomes nullptr, i.e., end of tree
 	while (node != nullptr) {
 		if (value == node->data) {
@@ -500,7 +516,8 @@ NodeT* RedBlackTree::searchNodeAndReturn(const int value) const
 //			smallestValue: lower bound of the range
 //			largestValue: upper bound of the range
 // POST: vector result is updated, containing all the values in the tree in the range [smallestValue, largestValue]
-void RedBlackTree::inOrderTraversal(NodeT* node, vector<int>& result, const int& smallestValue, const int& largestValue) const
+template <class T>
+void RedBlackTree<T>::inOrderTraversal(NodeT<T>* node, vector<T>& result, const T& smallestValue, const T& largestValue) const
 {
 	if (node != nullptr) {
 		inOrderTraversal(node->left, result, smallestValue, largestValue);
@@ -515,11 +532,12 @@ void RedBlackTree::inOrderTraversal(NodeT* node, vector<int>& result, const int&
 // Modified BST insertion method adapted for Red Black Tree
 // PARAM: value - value to be inserted
 // POST: Node with value will be inserted to the tree but no recoloring or rotation performed. Inserted node will be returned.
-NodeT* RedBlackTree::bstInsert(int value)
+template <class T>
+NodeT<T>* RedBlackTree<T>::bstInsert(const T value)
 {
-	NodeT* newNode = new NodeT(value);
-	NodeT* parent = root;
-	NodeT* insertionPoint = root;
+	NodeT<T>* newNode = new NodeT<T>(value);
+	NodeT<T>* parent = root;
+	NodeT<T>* insertionPoint = root;
 
 	if (root == nullptr) // if tree is empty 
 	{
@@ -557,9 +575,10 @@ NodeT* RedBlackTree::bstInsert(int value)
 
 
 // Left roate around the node
-void RedBlackTree::leftRotate(NodeT* node) 
+template <class T>
+void RedBlackTree<T>::leftRotate(NodeT<T>* node) 
 {
-	NodeT* rightChild = node->right;
+	NodeT<T>* rightChild = node->right;
 	node->right = rightChild->left; // right grand left child becomes node's right child
 
 	// if the right grand left child is not null, node becomes the right grand left child's parent 
@@ -591,9 +610,10 @@ void RedBlackTree::leftRotate(NodeT* node)
 
 
 // Right roate around the node ... symmetric to the leftRotate
-void RedBlackTree::rightRotate(NodeT* node)
+template <class T>
+void RedBlackTree<T>::rightRotate(NodeT<T>* node)
 {
-	NodeT* leftChild = node->left;
+	NodeT<T>* leftChild = node->left;
 	node->left = leftChild->right;
 
 	if (leftChild->right != nullptr) {
@@ -622,7 +642,8 @@ void RedBlackTree::rightRotate(NodeT* node)
 // PRE: Assume that node is not nullptr
 // PARAM: node to start with searching for the predecessor
 // POST: Returning the predecessor node
-NodeT* RedBlackTree::predecessor(NodeT* node) const 
+template <class T>
+NodeT<T>* RedBlackTree<T>::predecessor(NodeT<T>* node) const 
 {
 	if (node == nullptr) { // in case if nullptr is passed as a mistake, just return nullptr
 		return node;
@@ -645,7 +666,8 @@ NodeT* RedBlackTree::predecessor(NodeT* node) const
 // PRE: Assume that node is not nullptr
 // PARAM: node to start with searching for the successor
 // POST: Returning the successor node
-NodeT* RedBlackTree::successor(NodeT* node) const
+template <class T>
+NodeT<T>* RedBlackTree<T>::successor(NodeT<T>* node) const
 {
 	if (node == nullptr) { // in case if nullptr is passed as a mistake, just return nullptr
 		return node;
@@ -672,7 +694,8 @@ NodeT* RedBlackTree::successor(NodeT* node) const
 //		node: child of the removed node, which could be nullptr
 //		parent: node's parent (which cannot be a nullptr)
 // POST: Red Black Tree is fixed and its properties are maintained
-void RedBlackTree::rbTreeFix(NodeT* node, NodeT* parent) 
+template <class T>
+void RedBlackTree<T>::rbTreeFix(NodeT<T>* node, NodeT<T>* parent) 
 {
 	// use boolean flag for the nullptr
 	bool nodeIsBlack = false;
@@ -683,7 +706,7 @@ void RedBlackTree::rbTreeFix(NodeT* node, NodeT* parent)
 	}
 	while (node != root && nodeIsBlack)
 	{
-		NodeT* sibling; // can this be nullptr??
+		NodeT<T>* sibling; // can this be nullptr??
 		// if node is a left child, sibling is right child and vice versa
 		if (node == parent->left) {
 			sibling = parent->right;

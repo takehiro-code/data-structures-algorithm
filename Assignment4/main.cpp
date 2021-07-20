@@ -8,12 +8,15 @@ using std::endl;
 
 void printVector(vector<int> vec);
 
+// ----------------------------------------------------------------------------------
+//                                  Test Functions
+// ----------------------------------------------------------------------------------
 
 void random_test() 
 {
     cout << " ------------------------------- Random test for insertion and removal-----------------------------------------------" << endl;
 
-    RedBlackTree rb;
+    RedBlackTree<int> rb;
 
     // random generating numbers to automatically testing every possible cases
     const int range_from = 0;
@@ -36,7 +39,8 @@ void random_test()
     cout << "Number of values after removal: " << rb.size() << endl;
 
     rb.preOrderPrint();
-    cout << endl;
+    rb.inOrderPrint();
+    rb.visualize();
 }
 
 
@@ -45,45 +49,39 @@ void copyTest()
     cout << " --------------------------------------- copy test -----------------------------------------------" << endl;
 
     cout << "Copy Test 1: Copying empty trees ..." << endl;
-    RedBlackTree rb1;
-    RedBlackTree rb2(rb1);
-    RedBlackTree rb3 = rb1;
+    RedBlackTree<int> rb1;
+    RedBlackTree<int> rb2(rb1);
+    RedBlackTree<int> rb3 = rb1;
 
     cout << "rb1: ";
     rb1.preOrderPrint();
-    cout << endl;
 
     cout << "rb2: ";
     rb2.preOrderPrint();
-    cout << endl;
 
     cout << "rb3: ";
     rb3.preOrderPrint();
-    cout << endl;
 
 
     cout << "Copy Test 2: copying 1 node tree ..." << endl;
-    RedBlackTree rb4;
+    RedBlackTree<int> rb4;
     rb4.insert(4);
 
-    RedBlackTree rb5(rb4);
-    RedBlackTree rb6 = rb4;
+    RedBlackTree<int> rb5(rb4);
+    RedBlackTree<int> rb6 = rb4;
 
 
     cout << "rb4: ";
     rb4.preOrderPrint();
-    cout << endl;
 
     cout << "rb5: ";
     rb5.preOrderPrint();
-    cout << endl;
 
     cout << "rb6: ";
     rb6.preOrderPrint();
-    cout << endl;
 
     cout << "Copy Test 3: copying tree using random library ..." << endl;
-    RedBlackTree rb7;
+    RedBlackTree<int> rb7;
     const int range_from = 0;
     const int range_to = 10;
     std::random_device                  rand_dev;
@@ -94,34 +92,28 @@ void copyTest()
         rb7.insert(rand_num);
         //cout << rand_num << endl;
     }
-    RedBlackTree rb8(rb7);
-    RedBlackTree rb9 = rb7;
+    RedBlackTree<int> rb8(rb7);
+    RedBlackTree<int> rb9 = rb7;
     
     cout << "rb7: ";
     rb7.preOrderPrint();
-    cout << endl;
 
     cout << "rb8: ";
     rb8.preOrderPrint();
-    cout << endl;
 
     cout << "rb9: ";
     rb9.preOrderPrint();
-    cout << endl;
 
 
     rb1 = rb2 = rb3 = rb9;
     cout << "rb1: ";
     rb1.preOrderPrint();
-    cout << endl;
 
     cout << "rb2: ";
     rb2.preOrderPrint();
-    cout << endl;
 
     cout << "rb3: ";
     rb3.preOrderPrint();
-    cout << endl;
 }
 
 
@@ -131,7 +123,7 @@ void searchTest()
     cout << " ------------------------------------------ Search test -----------------------------------------------" << endl;
 
     int value;
-    RedBlackTree rb;
+    RedBlackTree<int> rb;
 
     rb.insert(10);
     rb.insert(8);
@@ -157,11 +149,9 @@ void searchTest()
 
     cout << "Pre-order printing: " << endl;
     rb.preOrderPrint();
-    cout << endl;
 
     cout << "In-order printing: " << endl;
     rb.inOrderPrint();
-    cout << endl;
 
 
     value = 33;
@@ -190,6 +180,27 @@ void searchTest()
 
     cout << "Testing search" << "(" << largestValue << ", " << smallestValue << ") ..." << endl;
     vector<int> result2 = rb.search(largestValue, smallestValue);
+    printVector(result2);
+
+    smallestValue = -100;
+    largestValue = 32;
+    cout << "Testing search" << "(" << smallestValue << ", " << largestValue << ") ..." << endl;
+    result = rb.search(smallestValue, largestValue);
+    printVector(result);
+
+    cout << "Testing search" << "(" << largestValue << ", " << smallestValue << ") ..." << endl;
+    result2 = rb.search(largestValue, smallestValue);
+    printVector(result2);
+
+
+    smallestValue = 14;
+    largestValue = 100;
+    cout << "Testing search" << "(" << smallestValue << ", " << largestValue << ") ..." << endl;
+    result = rb.search(smallestValue, largestValue);
+    printVector(result);
+
+    cout << "Testing search" << "(" << largestValue << ", " << smallestValue << ") ..." << endl;
+    result2 = rb.search(largestValue, smallestValue);
     printVector(result2);
 
     value = 1;
@@ -221,7 +232,7 @@ void searchTest()
     printVector(result3);
 
     cout << "Creating empty tree ..." << endl;
-    RedBlackTree rbEmpty;
+    RedBlackTree<int> rbEmpty;
 
     cout << "Testing rbEmpty.values() for the empty tree: " << endl;
     vector<int> result4 = rbEmpty.values();
@@ -234,48 +245,87 @@ void searchTest()
     cout << "Testing rb.size()  = " << rb.size() << endl;
 
     cout << "Testing rbEmpty.size()  = " << rbEmpty.size() << endl;
-
-
 }
+
+
+
+void intTest()
+{
+    cout << " ------------------------------------------ int test -----------------------------------------------" << endl;
+
+    RedBlackTree<int> rb;
+
+    rb.insert(10);
+    rb.insert(8);
+    rb.insert(6);
+    rb.insert(12);
+    rb.insert(30);
+    rb.insert(40);
+    rb.insert(33);
+    rb.insert(15);
+    rb.insert(16);
+    rb.insert(18);
+    rb.insert(31);
+
+    rb.remove(40);
+
+    rb.preOrderPrint();
+    rb.inOrderPrint();
+    rb.visualize();
+}
+
+
+
+void charTest()
+{
+    cout << " ------------------------------------------ char test -----------------------------------------------" << endl;
+    RedBlackTree<char> rb;
+    rb.insert('a');
+    rb.insert('g');
+    rb.insert('g');
+    rb.insert('e');
+    rb.insert('x');
+    rb.insert('z');
+    rb.insert('z');
+    //rb.remove('z');
+
+    rb.preOrderPrint();
+    rb.visualize();
+}
+
+void stringTest()
+{
+    cout << " ------------------------------------------ string test -----------------------------------------------" << endl;
+    RedBlackTree<string> rb;
+    rb.insert("hello");
+    rb.insert("fngo");
+    rb.insert("ss");
+    rb.insert("wfafen");
+    rb.insert("waffenSS");
+    rb.insert("sugoi");
+    rb.insert("wow");
+    //rb.remove('z');
+
+    rb.preOrderPrint();
+    rb.visualize();
+}
+
+
+
+// ----------------------------------------------------------------------------------
+//                                  MAIN
+// ----------------------------------------------------------------------------------
 
 int main()
 {
     cout << "testing assignment 4 ..." << endl;
 
-    //RedBlackTree rb;
-    //rb.insert(10);
-    //rb.insert(8);
-    //rb.insert(6);
-    //rb.insert(12);
-    //rb.insert(30);
-    //rb.insert(40);
-    //rb.insert(33);
-    //rb.insert(15);
-    //rb.insert(16);
-    //rb.insert(18);
-    //rb.insert(31);
-    //rb.remove(12);
-
-    //rb.insert(10);
-    //rb.insert(6);
-    //rb.insert(15);
-    //rb.insert(30);
-    //rb.insert(8);
-    //rb.remove(6);
-
-    //rb.insert(31);
-    //rb.insert(31);
-    //rb.insert(31);
-    //rb.remove(310);
-    //rb.remove(3);
-
-
-    //rb.preOrderPrint();
-    //cout << endl;
-
     random_test();
     copyTest();
     searchTest();
+    intTest();
+    charTest();
+    stringTest();
 
     return 0;
 }
@@ -284,45 +334,52 @@ int main()
 // ----------------------------------------------------------------------------------
 //                                  For debugging
 // ----------------------------------------------------------------------------------
-void RedBlackTree::preOrderPrint() const
+template <class T>
+void RedBlackTree<T>::preOrderPrint() const
 {
     preOrderPrint(root);
+    cout << endl;
 }
 
-void RedBlackTree::inOrderPrint() const
+template <class T>
+void RedBlackTree<T>::inOrderPrint() const
 {
     inOrderPrint(root);
+    cout << endl;
 }
 
-void RedBlackTree::preOrderPrint(NodeT* nd) const
+template <class T>
+void RedBlackTree<T>::preOrderPrint(NodeT<T>* node) const
 {
-    if (nd != nullptr) {
+    if (node != nullptr) {
         char color;
-        if (nd->isBlack) {
+        if (node->isBlack) {
             color = 'B';
         }
         else {
             color = 'R';
         }
-        cout << nd->data << "(" << color << ")" << " ";
-        preOrderPrint(nd->left);
-        preOrderPrint(nd->right);
+        cout << node->data << "(" << color << ")" << " ";
+        preOrderPrint(node->left);
+        preOrderPrint(node->right);
     }
 }
 
-void RedBlackTree::inOrderPrint(NodeT* nd) const
+
+template <class T>
+void RedBlackTree<T>::inOrderPrint(NodeT<T>* node) const
 {
-    if (nd != nullptr) {
+    if (node != nullptr) {
         char color;
-        if (nd->isBlack) {
+        if (node->isBlack) {
             color = 'B';
         }
         else {
             color = 'R';
         }
-        inOrderPrint(nd->left);
-        cout << nd->data << "(" << color << ")" << " ";
-        inOrderPrint(nd->right);
+        inOrderPrint(node->left);
+        cout << node->data << "(" << color << ")" << " ";
+        inOrderPrint(node->right);
     }
 }
 
@@ -332,4 +389,45 @@ void printVector(vector<int> vec) {
         cout << vec[i] << " ";
     }
     cout << endl;
+}
+
+
+template<class T>
+void RedBlackTree<T>::visualize() const
+{
+    visualizeTraversal(root, "\t", true);
+}
+
+
+//put the definition int the private section in your class
+template<class T>
+void RedBlackTree<T>::visualizeTraversal(NodeT<T>* rootRef, string indent, bool last) const
+{
+    if (rootRef != nullptr) {
+
+        cout << indent;
+
+        if (last) {
+            if (root == rootRef)
+            {
+                cout << "ROOT----";
+            }
+            else
+            {
+                cout << "R----";
+            }
+
+            indent += "         ";
+        }
+        else {
+            cout << "L----";
+            indent += "|  ";
+        }
+
+        string colour = rootRef->isBlack ? "B" : "R";
+        cout << rootRef->data << "(" << colour << ")" << endl;
+
+        visualizeTraversal(rootRef->left, indent, false);
+        visualizeTraversal(rootRef->right, indent, true);
+    }
 }
