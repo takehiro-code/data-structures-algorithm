@@ -15,7 +15,6 @@ using std::endl;
 // Part 1 - Red Black Tree
 // ----------------------------------------------------------------------------------------------------------------------
 
-
 // Red black tree node class
 template <class T>
 class NodeT
@@ -31,7 +30,7 @@ public:
 
 
 // -----------------------------------------------------------------------------------------------
-// Class Declarations
+// Red Black Tree Class Declarations
 // -----------------------------------------------------------------------------------------------
 
 // red black tree class declarations
@@ -42,28 +41,37 @@ public:
 	// default constructor
 	RedBlackTree();
 
-	// Copy constructor
-	// PRE: calling object not initialized yet
-	// POST: Copying the contents of rbTree to the calling object
+	// copy constructor
 	RedBlackTree(const RedBlackTree& rbTree);
 
-	// Overloaded assignment operator
-	// PRE: calling object may contain contents
-	// POST: Copying the contents of rbTree to the calling object
+	// overloaded assignment operator
 	RedBlackTree& operator=(const RedBlackTree& rbTree);
 
 	// destructor
-	// POST: all the memory will be de-allocated
 	~RedBlackTree();
 
-	// insert
-	bool insert(const T value);
-	bool remove(const T value);
-	bool search(const T value) const;
+	// new node with value will be inserted to the tree while red black tree properties are maintained by re-coloring and rotation
+	bool insert(T value);
+
+	// new node with value will be removed while red black tree properties are maintained by re-coloring and rotation
+	bool remove(T value);
+
+	// search for the node with value in the tree and check if it exists
+	bool search(T value) const;
+
+	// search for values in the range [value1, value2] or [value2, value1] in the tree and return them in ascending order
 	vector<T> search(T value1, T value2) const;
-	T closestLess(const T value) const;
-	T closestGreater(const T value) const;
+
+	// Find a largest possible value less than the parameter value
+	T closestLess(T value) const;
+
+	// Find a smallest possible value greater than the parameter value
+	T closestGreater(T value) const;
+
+	// Return all values in ascending order
 	vector<T> values() const;
+
+	// Return the number of nodes (or say values) in a tree
 	int size() const;
 
 	template <class Tjwme>
@@ -76,21 +84,46 @@ public:
 	void preOrderPrint(NodeT<T>* node) const;
 	void inOrderPrint(NodeT<T>* node) const;
 	void visualizeTraversal(NodeT<T>* node, string space, bool flag) const;
+	int getBlackHeight() const;
+	bool isRBTreeBlackHeightValid() const;
+	int computeBlackHeight(NodeT<T>* node) const;
 
 private:
-	NodeT<T>* root;
-	int curSize;
+	NodeT<T>* root; // root node
+	int curSize; // current number of size in the tree
 
 	// private methods
+
+	// copy red black tree with pre-order traversal
 	void copyRedBlackTree(NodeT<T>* node);
+
+	// de-allocates the memory for nodes with post-order traversal
 	void clear(NodeT<T>* node);
-	NodeT<T>* searchNodeAndReturn(const T value) const;
+
+	// search for the node with value and then return the node
+	NodeT<T>* searchNodeAndReturn(T value) const;
+
+	// in-order traversal to push back the value into the vector, so that the vector will have values in ascending order
 	void inOrderTraversal(NodeT<T>* node, vector<T>& result, const T & smallestValue, const T & largestValue) const;
-	NodeT<T>* bstInsert(const T value);
+
+	// inserting the node with value and only BST properties are maintained but not red black tree properties
+	// Return the inserted node
+	NodeT<T>* bstInsert(T value);
+
+	// Left rotate about the parameter node
 	void leftRotate(NodeT<T>* node);
+
+	// Right rotate about the parameter node
 	void rightRotate(NodeT<T>* node);
+
+	// Predecessor of the parameter node
 	NodeT<T>* predecessor(NodeT<T>* node) const;
+
+	// Succesor of the parameter node
 	NodeT<T>* successor(NodeT<T>* node) const;
+
+	// Fixing the tree to maintain red black tree properties via re-coloring and rotations.
+	// Used in the remove method
 	void rbTreeFix(NodeT<T>* node, NodeT<T>* parent);
 };
 
@@ -98,7 +131,6 @@ private:
 // -----------------------------------------------------------------------------------------------
 // Method Implementations
 // -----------------------------------------------------------------------------------------------
-
 
 // RedBlackTree class definitions
 
@@ -156,7 +188,7 @@ RedBlackTree<T>::~RedBlackTree()
 //			node: node to be inserted (node cannot be nullptr)
 //			uncle: uncle of node (uncle could be nullptr)
 template <class T>
-bool RedBlackTree<T>::insert(const T value) 
+bool RedBlackTree<T>::insert(T value) 
 {
 	// when value is already in the tree, don't insert
 	if (search(value)) {
@@ -240,7 +272,7 @@ bool RedBlackTree<T>::insert(const T value)
 //		toBeRemoved: Node to be actually removed. It can be either node itself or predecessor. The value will be copied into node.
 //		child: The child node of toBeRemoved.
 template <class T>
-bool RedBlackTree<T>::remove(const T value)
+bool RedBlackTree<T>::remove(T value)
 {
 	// search for the value
 	NodeT<T>* node = searchNodeAndReturn(value);
@@ -313,7 +345,7 @@ bool RedBlackTree<T>::remove(const T value)
 // PARAM: value - value tha we went to search in the tree
 // POST: Return true if value is found, otherwise, return false.
 template <class T>
-bool RedBlackTree<T>::search(const T value) const
+bool RedBlackTree<T>::search(T value) const
 {
 	NodeT<T>* node = searchNodeAndReturn(value);
 	if (node == nullptr) {
@@ -332,7 +364,7 @@ bool RedBlackTree<T>::search(const T value) const
 // POST: Return the vector of range [value1, value2] or [value2, value1] or [value1, value1]. value1 and value2 are inclusive.
 // vector is in ascending order (smallest to largest)
 template <class T>
-vector<T> RedBlackTree<T>::search(const T value1, const T value2) const
+vector<T> RedBlackTree<T>::search(T value1, T value2) const
 {
 	vector<int> result;
 
@@ -354,7 +386,7 @@ vector<T> RedBlackTree<T>::search(const T value1, const T value2) const
 // POST: Return a value that is less the parameter value. 
 //		 If there is no value less than the parameter value, return the parameter value itself.
 template <class T>
-T RedBlackTree<T>::closestLess(const T value) const
+T RedBlackTree<T>::closestLess(T value) const
 {
 	T result = value;
 
@@ -384,7 +416,7 @@ T RedBlackTree<T>::closestLess(const T value) const
 // POST: Return a value that is greater the parameter value. 
 //		 If there is no value greater than the parameter value, return the parameter value itself.
 template <class T>
-T RedBlackTree<T>::closestGreater(const T value) const
+T RedBlackTree<T>::closestGreater(T value) const
 {
 	T result = value;
 
@@ -471,7 +503,7 @@ void RedBlackTree<T>::copyRedBlackTree(NodeT<T>* node)
 // Empties tree
 // PRE:
 // PARAM: node - This should be root during the 1st call
-// POST: Removes all nodes from tree, deallocates dynamic memory
+// POST: Removes all nodes from tree, deallocates dynamic memory with post-order traversal
 template <class T>
 void RedBlackTree<T>::clear(NodeT<T>* node)
 {
@@ -490,7 +522,7 @@ void RedBlackTree<T>::clear(NodeT<T>* node)
 // PARAM: value - value to be searched for the node
 // POST: If found, return the node. If not found, return the nullptr.
 template <class T>
-NodeT<T>* RedBlackTree<T>::searchNodeAndReturn(const T value) const
+NodeT<T>* RedBlackTree<T>::searchNodeAndReturn(T value) const
 {
 	// search for the value
 	NodeT<T>* node = root; // starting from root node to search
@@ -534,7 +566,7 @@ void RedBlackTree<T>::inOrderTraversal(NodeT<T>* node, vector<T>& result, const 
 // PARAM: value - value to be inserted
 // POST: Node with value will be inserted to the tree but no recoloring or rotation performed. Inserted node will be returned.
 template <class T>
-NodeT<T>* RedBlackTree<T>::bstInsert(const T value)
+NodeT<T>* RedBlackTree<T>::bstInsert(T value)
 {
 	NodeT<T>* newNode = new NodeT<T>(value);
 	NodeT<T>* parent = root;
@@ -835,9 +867,10 @@ void statistics(string filename)
 			tree.insert(value); // no duplicates can be inserted
 		}
 	}
-	else {
-		cout << "File cannot be opened ... " << endl;
-	}
+	// since no error assumed by the requirement, commented the case the file cannot be opened
+	//else {
+	//	cout << "File cannot be opened ... " << endl;
+	//}
 	file.close();
 
 	// Now you have all the contents from the file

@@ -28,14 +28,15 @@ void printVector(vector<int> vec);
 int main()
 {
     cout << "testing assignment 4 ..." << endl;
-
-    statisticsTest();
+    
+    simpleTest();
     randomTest();
     copyTest();
     searchTest();
     intTest();
     charTest();
     stringTest();
+    statisticsTest();
 
     return 0;
 }
@@ -112,16 +113,23 @@ void randomTest()
     for (int i = 0; i < 10000; i++) {
         int rand_num = distr(generator);
         rb.insert(rand_num);
-        //cout << rand_num << endl;
+        if (!rb.isRBTreeBlackHeightValid()) {
+            cout << "Black Height Properties Violated" << endl;
+            break;
+        }
     }
     cout << "Number of values before removal: " << rb.size() << endl;
 
     for (int i = 0; i < 5000; i++) {
         int rand_num = distr(generator);
         rb.remove(rand_num);
-        //cout << rand_num << endl;
+        if (!rb.isRBTreeBlackHeightValid()) {
+            cout << "Black Height Properties Violated" << endl;
+            break;
+        }
     }
     cout << "Number of values after removal: " << rb.size() << endl;
+    cout << "Black Height: " << rb.getBlackHeight() << endl;
 
     rb.preOrderPrint();
     rb.inOrderPrint();
@@ -222,15 +230,18 @@ void searchTest()
     rb.insert(18);
     rb.insert(31);
 
+    cout << "The following contents are inserted" << endl;
+    printVector(rb.values());
+
     value = 31;
     cout << "Testing rb.insert" << "(" << value << "): " << rb.insert(value) << endl;
     cout << "Testing rb.insert" << "(" << value << "): " << rb.insert(value) << endl;
     cout << "Testing rb.insert" << "(" << value << "): " << rb.insert(value) << endl;
     
     value = 310;
-    cout << "Testing rb.insert" << "(" << value << "): " << rb.remove(value) << endl;
+    cout << "Testing rb.remove" << "(" << value << "): " << rb.remove(value) << endl;
     value = 3;
-    cout << "Testing rb.insert" << "(" << value << "): " << rb.remove(value) << endl;
+    cout << "Testing rb.remove" << "(" << value << "): " << rb.remove(value) << endl;
 
     cout << "Pre-order printing: " << endl;
     rb.preOrderPrint();
@@ -294,6 +305,8 @@ void searchTest()
     cout << "Testing closestLess" << "(" << value << ")  = " << rb.closestLess(value) << endl;
     value = 12;
     cout << "Testing closestLess" << "(" << value << ")  = " << rb.closestLess(value) << endl;
+    value = 32;
+    cout << "Testing closestLess" << "(" << value << ")  = " << rb.closestLess(value) << endl;
     value = 33;
     cout << "Testing closestLess" << "(" << value << ")  = " << rb.closestLess(value) << endl;
     value = 100;
@@ -304,6 +317,8 @@ void searchTest()
     value = 6;
     cout << "Testing closestGreater" << "(" << value << ")  = " << rb.closestGreater(value) << endl;
     value = 12;
+    cout << "Testing closestGreater" << "(" << value << ")  = " << rb.closestGreater(value) << endl;
+    value = 14;
     cout << "Testing closestGreater" << "(" << value << ")  = " << rb.closestGreater(value) << endl;
     value = 33;
     cout << "Testing closestGreater" << "(" << value << ")  = " << rb.closestGreater(value) << endl;
@@ -353,6 +368,11 @@ void intTest()
     rb.insert(31);
 
     rb.remove(40);
+
+    cout << "Black Height: " << rb.getBlackHeight() << endl;
+    if (!rb.isRBTreeBlackHeightValid()) {
+        cout << "Black Height Property violated." << endl;
+    }
 
     rb.preOrderPrint();
     rb.inOrderPrint();
@@ -495,4 +515,39 @@ void RedBlackTree<T>::visualizeTraversal(NodeT<T>* rootRef, string indent, bool 
         visualizeTraversal(rootRef->left, indent, false);
         visualizeTraversal(rootRef->right, indent, true);
     }
+}
+
+
+template<class T>
+int RedBlackTree<T>::getBlackHeight() const
+{
+    return computeBlackHeight(root);
+}
+
+template<class T>
+bool RedBlackTree<T>::isRBTreeBlackHeightValid() const
+{
+    return computeBlackHeight(root) != -1;
+}
+
+// helper method
+// Returns the number of black nodes in a subtree of the given node
+// or -1 if it is not a red black tree.
+template<class T>
+int RedBlackTree<T>::computeBlackHeight(NodeT<T>* node) const {
+    // For an empty subtree the answer is obvious
+    if (node == nullptr)
+        return 0;
+    // Computes the height for the left and right child recursively
+    int leftHeight = computeBlackHeight(node->left);
+    int rightHeight = computeBlackHeight(node->right);
+
+    int add = node->isBlack == true ? 1 : 0;
+    // The current subtree is not a red black tree if and only if
+    // one or more of current node's children is a root of an invalid tree
+    // or they contain different number of black nodes on a path to a null node.
+    if (leftHeight == -1 || rightHeight == -1 || leftHeight != rightHeight)
+        return -1;
+    else
+        return leftHeight + add;
 }
