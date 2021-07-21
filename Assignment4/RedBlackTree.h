@@ -2,11 +2,12 @@
 
 #include <vector>
 #include <string>
+#include <fstream>
+#include <iostream>
+
 using std::vector;
 using std::string;
-
-// debugging
-#include <iostream>
+using std::ifstream;
 using std::cout;
 using std::endl;
 
@@ -813,12 +814,88 @@ void RedBlackTree<T>::rbTreeFix(NodeT<T>* node, NodeT<T>* parent)
 
 
 
-
 // ----------------------------------------------------------------------------------------------------------------------
 // Part 2 - Statistics Function (not a method of RedBlackTree class)
 // ----------------------------------------------------------------------------------------------------------------------
 
-//void statistics(string filename) 
-//{
-//
-//}
+// PRE: No error could occur associated with a file.
+// PARAM: filename - file name of the file that contains either empty or some values.
+// POST: Print the formatted console output of statistical result of values from the file
+void statistics(string filename) 
+{
+	// initialize the working red black tree object
+	RedBlackTree<double> tree;
+
+	// read the content from the file and insert them into the tree object
+	ifstream file(filename);
+	double value;
+	if (file.is_open()) {
+		while (file >> value)
+		{
+			tree.insert(value); // no duplicates can be inserted
+		}
+	}
+	else {
+		cout << "File cannot be opened ... " << endl;
+	}
+	file.close();
+
+	// Now you have all the contents from the file
+	// First, get the number of unique values in the tree
+	int numValues = tree.size();
+
+	if (numValues > 0) 
+	{
+		vector<double> result = tree.values();
+		int sizeResult = result.size(); // equivalently, you can use numValues, but I sticked with common way, using .size()
+
+		// find the average
+		double average = 0;
+		for (int i = 0; i < sizeResult; i++) {
+			average += result[i];
+		}
+		average = average / (double)sizeResult;
+
+		// find the median
+		double median;
+		if (sizeResult % 2 == 1) // when the number of values are odd
+		{
+			median = result[sizeResult / 2];
+		}
+		else { // when the number of values are even
+			int leftIndex = (sizeResult - 1) / 2;
+			int rightIndex = sizeResult / 2;
+			double medianLeft = result[leftIndex];
+			double medianRight = result[rightIndex];
+			median = (medianLeft + medianRight) / 2;
+		}
+
+		double lessThan42 = tree.closestLess(42.0);
+		double greaterThan42 = tree.closestGreater(42.0);
+
+		// Printing the results
+		cout << "# of unique values:\t" << numValues << endl;
+		cout << "Average:\t\t" << average << endl;
+		cout << "Median:\t\t\t" << median << endl;
+
+		// if no value found, closestLess() will return the parameter value, so we can post-process the message
+		if (lessThan42 < 42.0) {
+			cout << "Closest value < 42.0:\t" << lessThan42 << endl;
+		}
+		else {
+			cout << "Closest value < 42.0:\tNo such value found" << endl;
+		}
+
+		if (greaterThan42 > 42.0) {
+			cout << "Closest value > 42.0:\t" << greaterThan42 << endl;
+		}
+		else {
+			cout << "Closest value > 42.0:\tNo such value found" << endl;
+		}
+	}
+	else {
+		// Printing the results
+		cout << "# of unique values:\t" << numValues << endl;
+		cout << "File is empty ... " << endl;
+	}
+}

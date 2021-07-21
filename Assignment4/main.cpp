@@ -3,16 +3,101 @@
 
 #include <random>
 #include <iostream>
+//#include <fstream>
+using std::ofstream;
 using std::cout;
 using std::endl;
 
+void simpleTest();
+void randomTest();
+void copyTest();
+void searchTest();
+void intTest();
+void charTest();
+void stringTest();
+void statisticsTest();
+
 void printVector(vector<int> vec);
+
+
+
+// ----------------------------------------------------------------------------------
+//                                  MAIN
+// ----------------------------------------------------------------------------------
+
+int main()
+{
+    cout << "testing assignment 4 ..." << endl;
+
+    statisticsTest();
+    randomTest();
+    copyTest();
+    searchTest();
+    intTest();
+    charTest();
+    stringTest();
+
+    return 0;
+}
+
 
 // ----------------------------------------------------------------------------------
 //                                  Test Functions
 // ----------------------------------------------------------------------------------
 
-void random_test() 
+void statisticsTest()
+{
+    cout << " ------------------------------------------ statistics test -----------------------------------------------" << endl;
+
+    statistics("../../../test.txt");
+    cout << endl;
+
+    // creating test3.txt
+    ofstream file;
+    file.open("../../../test3.txt");
+    //// random generating numbers to automatically testing every possible cases
+    const int range_from = 0;
+    const int range_to = 1000;
+    std::random_device                  rand_dev;
+    std::mt19937                        generator(rand_dev());
+    std::uniform_int_distribution<int>  distr(range_from, range_to);
+    for (int i = 100; i < 110; i++) {
+        //double rand_num = distr(generator) / 7.837509790;
+        double rand_num = i;
+        file << (double)rand_num << endl;
+    }
+    file.close();
+    statistics("../../../test2.txt");
+    cout << endl;
+
+    statistics("../../../test3.txt");
+    cout << endl;
+
+}
+
+
+void simpleTest()
+{
+    // Int Tree Tests	
+    RedBlackTree<int> rb1;
+    if (rb1.insert(42)) cout << "inserted 42" << endl;
+    rb1.insert(71);
+    rb1.insert(13);
+    RedBlackTree<int> rb2(rb1);
+
+    if (rb1.remove(13)) cout << "removed 13" << endl;
+    if (rb1.search(42)) cout << "found 42" << endl;
+
+    vector<int> v1 = rb1.search(50, 100); //should contain 71
+    vector<int> v2 = rb1.values(); //should contain {42,71}
+
+    cout << "closestLess(12) = " << rb1.closestLess(12) << endl;
+    cout << "closestGreater(91) = " << rb1.closestGreater(91) << endl;
+
+    cout << "size = " << rb1.size() << endl; //should be 2
+}
+
+void randomTest() 
 {
     cout << " ------------------------------- Random test for insertion and removal-----------------------------------------------" << endl;
 
@@ -308,26 +393,6 @@ void stringTest()
 
     rb.preOrderPrint();
     rb.visualize();
-}
-
-
-
-// ----------------------------------------------------------------------------------
-//                                  MAIN
-// ----------------------------------------------------------------------------------
-
-int main()
-{
-    cout << "testing assignment 4 ..." << endl;
-
-    random_test();
-    copyTest();
-    searchTest();
-    intTest();
-    charTest();
-    stringTest();
-
-    return 0;
 }
 
 
