@@ -419,6 +419,18 @@ void stringTest()
 // ----------------------------------------------------------------------------------
 //                                  For debugging
 // ----------------------------------------------------------------------------------
+//// for debugging - place this in public method in RedBlackTree class
+//void preOrderPrint() const;
+//void inOrderPrint() const;
+//void visualize() const;
+//void preOrderPrint(NodeT<T>* node) const;
+//void inOrderPrint(NodeT<T>* node) const;
+//void visualizeTraversal(NodeT<T>* node, string space, bool flag) const;
+//int getBlackHeight() const;
+//bool isRBTreeBlackHeightValid() const;
+//int computeBlackHeight(NodeT<T>* node) const;
+
+
 template <class T>
 void RedBlackTree<T>::preOrderPrint() const
 {
