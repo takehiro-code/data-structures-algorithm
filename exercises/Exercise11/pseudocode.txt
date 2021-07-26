@@ -1,0 +1,77 @@
+
+// Conunt the frequency of character in a string
+// this algorithm has O(n) performance, traversing string s for 26 times
+// ========================================================
+countFrequency(string s)
+    count = 0
+    for each letter of the alphabet
+        for each character ch in s
+            if (ch == letter)
+                count++
+        if count > 0
+            print letter + ": " + count
+        count = 0
+// ========================================================
+
+
+
+// Better algorithm using common unordered map
+// This algorithm iterates through the characters in the string once
+// ========================================================
+countFrequency(string word)
+    map = {} // initialize the unordered map
+    // traversing each letter (i.e. key) in word
+    for each character key in word
+        if (map.search(key) == false) // if key is not in map
+            map.insert({key, 1}) // initialize the count 1 to a corresponding key
+        else
+            map[key] += 1
+    
+    // printing each key and corresponding count value in the map
+    for key in map
+        print key + ": " + map[key]
+// ========================================================
+
+
+// Better algorithm using hash table with separate chaining from scratch
+// This algorithm iterates through the characters in the string once
+// ========================================================
+countFrequency(string word)
+    n = word.length
+    arrSize = floor ( n / (2.0 / 3.0) ) // determing the array size such that load factor <= 2.0/3.0
+    // initialize the array with nullptr with size arrSize
+    for i = 0 to arrSize
+        arr[i] = nullptr
+
+    // traversing each character key in a word once
+    for each character key in word
+        intKey = convertKeyToInteger(key) // 'a' = 1, 'b' = 2 .., 'z' = 26
+        index = intKey mod arrSize
+
+        // when no collision, arr[index] is empty 
+        if (arr[index] == nullptr)
+            newPtr = new Node(key, 1) // initializing count for the corresponding key with 1
+            arr[index] = newPtr
+        // when having collision, arr[index] already contains pointer
+        // check if the chain contains the same key, if so increment the count value, otherwise create new pointer
+        else
+            p = arr[index] // starting from the top of the chain
+            //check if key already exists in arr[index] chains
+            while (p != nullptr)
+                if (key == arr[index].key)
+                    arr[index].count += 1
+                temp = p
+                p = p->nextPtr
+            
+            // no existing key
+            newPtr = new Node(key, 1) // initializing count for the corresponding key with 1
+            temp->nextPtr = newPtr // insert a new node
+    
+    // printing each item in the hash table
+    for index in arr
+        if (arr[index] != nullptr)
+            p = arr[index]
+            while (p != nullptr)
+                print p.key + ": " + p.value
+                p = p->nextPtr
+// ========================================================
