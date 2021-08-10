@@ -6,6 +6,11 @@
 
 using std::vector;
 
+// Reference:
+// Used string methods from https://www.cplusplus.com/reference/string/string/assign/
+// Used std::sort from <algorithm> library https://www.cplusplus.com/reference/algorithm/sort/
+// Used std::find from <algorithm> library https://www.cplusplus.com/reference/algorithm/find/
+
 // NOTE:
 // Each function is in the form of:
 // vector<string> functionName(const HashTable & dict, string word)
