@@ -178,6 +178,29 @@ Single-character variable or function naming is not a good practice. Give a sens
 Binary Search Tree: Can be either complete or non-complete, Fully Ordered
 Heaps (max heap, min heap): Complete, Partially Ordered
 
+
+## Priority Queue
+
+pseudocode
+
+`pq = {}`
+
+`pq.enqueue(1)`
+
+`pq.enqueue(8)`
+
+`pq.enqueue(3)`
+
+`pq.enqueue(7)`
+
+pq becomes `{8, 7, 3, 1}`
+
+The highest priority item is 8 (if the priority is defined for higher number).
+
+`pq.dequeue()` --> remove 8. Time complexity is O(log n)
+
+### Heap implementation of Priority Queue
+
 Max heap insertion process:
 
 1. Insert a new item into the first available leaf location, which will maintain complete tree

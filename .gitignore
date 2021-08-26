@@ -2,6 +2,8 @@
 *.zip
 *.rar
 a.out
+wordlist1000.txt
+words_alpha.txt
 
 # folders to be removed
 .vs/
