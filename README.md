@@ -1,4 +1,4 @@
-# CMPT 225
+# Data Structures and Algorithm
 
 To compress the files with zip command,
 
@@ -42,29 +42,9 @@ For more detail, see https://devblogs.microsoft.com/cppblog/c-with-visual-studio
 
 ### Valgrind setup on WSL:
 
-The software to perform memory leak check. follow the following instruction to install Valgrind on WSL.
+The software to perform memory leak check. Execute the following command to install Valgrind on WSL.
 
-**Steps 1 to 6 may not be necessary...**
-
-1. Install the latest version from https://valgrind.org/downloads/current.html. Simply, execute on WSL: `wget https://sourceware.org/pub/valgrind/valgrind-3.17.0.tar.bz2` 
-
-2. On the WSL root directory to extract the folder: `tar -xvjf valgrind-3.17.0.tar.bz2`
-
-3. To configure, execute:
-
-`cd valgrind-3.17.0` (go to the folder)
-
-`./configure`
-
-4. On the same directory, execute: `make`
-
-5. `make check`
-
-6. Install Valgrind, `sudo make install`
-
-For more detail, see https://stackoverflow.com/questions/40355474/valgrind-does-not-work-with-wsl.
-
-7. `sudo apt install valgrind`
+`sudo apt install valgrind`
 
 Then you can run the program with memory check e.g.:
 
